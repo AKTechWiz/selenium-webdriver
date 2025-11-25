@@ -1,9 +1,23 @@
+
 pipeline {
   agent any
   stages {
     stage('Test') {
       steps {
-        sh 'python3 TestScriptMay092025.py'
+       sh '''
+            # 1. Create a virtual environment named 'my_env' in the workspace
+            python3 -m venv my_env
+
+            # 2. Activate the environment
+            . my_env/bin/activate
+
+            # 3. Install the required libraries INSIDE this environment
+            # (This works because we are now inside the venv, not the system)
+            pip install selenium webdriver-manager
+
+            # 4. Run your script
+            python TestScriptMay092025.py
+        '''
       }
     }
 }
